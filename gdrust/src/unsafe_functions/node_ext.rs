@@ -13,7 +13,7 @@ pub trait NodeExt<P: Into<NodePath>> {
     /// ```gdscript
     /// get_node(path)
     /// ```
-    fn expect_node<'a, T: SubClass<Node>, P>(&self, path: P) -> TRef<'a, T>;
+    fn expect_node<'a, T: SubClass<Node>>(&self, path: P) -> TRef<'a, T>;
 
     /// Gets the parent node with a type. This has an explicit `unsafe` block, and can panic. The
     /// unsafe code is calling `assume_safe` on the parent node.
