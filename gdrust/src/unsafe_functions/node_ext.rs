@@ -2,7 +2,7 @@ use crate::unsafe_functions::option_ext::OptionExt;
 use gdnative::api::SceneTree;
 use gdnative::prelude::{NewRef, Node, NodePath, Shared, SubClass, TRef};
 
-pub trait NodeExt {
+pub trait NodeExt<P: Into<NodePath>> {
     /// Gets a typed node from a node path. This has an explicit `unsafe` block, and can panic. The
     /// unsafe code is calling `assume_safe` on the node at `path`.
     /// # Panics
@@ -13,7 +13,7 @@ pub trait NodeExt {
     /// ```gdscript
     /// get_node(path)
     /// ```
-    fn expect_node<'a, T: SubClass<Node>, P: Into<NodePath>>(&self, path: P) -> TRef<'a, T>;
+    fn expect_node<'a, T: SubClass<Node>, P>(&self, path: P) -> TRef<'a, T>;
 
     /// Gets the parent node with a type. This has an explicit `unsafe` block, and can panic. The
     /// unsafe code is calling `assume_safe` on the parent node.
@@ -39,11 +39,11 @@ pub trait NodeExt {
     fn expect_tree<'a>(&self) -> TRef<'a, SceneTree>;
 }
 
-impl<T: SubClass<Node>> NodeExt for T {
-    fn expect_node<'a, Child: SubClass<Node>, P: Into<NodePath>>(
-        &self,
-        path: P,
-    ) -> TRef<'a, Child> {
+impl<T: SubClass<Node>, P: Into<NodePath>> NodeExt<P> for T {
+    fn expect_node<'a, Child>(&self, path: P) -> TRef<'a, Child>
+    where
+        Child: SubClass<Node>,
+    {
         let path = path.into();
         let path_name = path.to_string();
         unsafe {
