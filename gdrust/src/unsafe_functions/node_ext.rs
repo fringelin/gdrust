@@ -1,8 +1,6 @@
 use crate::unsafe_functions::option_ext::OptionExt;
 use gdnative::api::SceneTree;
-use gdnative::prelude::{Node, NodePath, Shared, SubClass};
-use gdnative::NewRef;
-use gdnative::TRef;
+use gdnative::prelude::{NewRef, Node, NodePath, Shared, SubClass, TRef};
 
 pub trait NodeExt {
     /// Gets a typed node from a node path. This has an explicit `unsafe` block, and can panic. The

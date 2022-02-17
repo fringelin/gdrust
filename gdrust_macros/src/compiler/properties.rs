@@ -225,9 +225,8 @@ pub fn extract_properties(item: &mut ItemStruct) -> Vec<Property> {
 pub fn get_property(item: &mut Field) -> Property {
     let mut property = Property::new(
         item.ident
-            .as_ref()
-            .expect("Properties must be on named field")
-            .clone(),
+            .clone()
+            .expect("Properties must be on named field"),
         item.ty.clone(),
     );
     item.attrs = item

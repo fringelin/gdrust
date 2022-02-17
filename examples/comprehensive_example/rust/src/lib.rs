@@ -1,6 +1,5 @@
 use gdnative::api::{Node, Texture};
-use gdnative::prelude::{Color, InitHandle, NodePath, ToVariant};
-use gdnative::{godot_init, Ref, TRef};
+use gdnative::prelude::*;
 use gdrust::macros::gdrust;
 
 #[gdrust(extends = Node)]
@@ -102,11 +101,11 @@ struct HelloWorld {
     exp_range_with_all: u64,
 
     #[export]
-    #[default(Color::rgba(0.0, 0.0, 0.0, 0.5))]
+    #[default(Color::from_rgba(0.0, 0.0, 0.0, 0.5))]
     color: Color,
 
     #[export_color_no_alpha]
-    #[default(Color::rgb(0.0, 0.0, 0.0))]
+    #[default(Color::from_rgb(0.0, 0.0, 0.0))]
     color_no_alpha: Color,
 
     #[export_flags("Fire", "Water", "Earth", "Wind")]
@@ -129,12 +128,12 @@ struct HelloWorld {
     layers_3d_render: u32,
 }
 
-#[gdnative::methods]
+#[methods]
 impl HelloWorld {
     #[export]
     fn _ready(&self, owner: TRef<Node>) {
-        gdnative::godot_print!("Hello World!");
-        gdnative::godot_dbg!(self);
+        godot_print!("Hello World!");
+        godot_dbg!(self);
         owner
             .upcast::<Node>()
             .emit_signal(Self::SIMPLE_SIGNAL, &[0.to_variant()]);

@@ -1,8 +1,7 @@
 use crate::unsafe_functions::vector3_ext::Vector3Ext;
 use gdnative::api::Spatial;
 use gdnative::object::SubClass;
-use gdnative::prelude::{Basis, Vector3};
-use gdnative::TRef;
+use gdnative::prelude::{Basis, TRef, Vector3};
 
 pub trait SpatialExt {
     /// Sets the local rotation of the Spatial.

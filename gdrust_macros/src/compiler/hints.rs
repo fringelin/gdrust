@@ -77,8 +77,8 @@ fn export_range_hint_helper(range: &[&Lit], ty: &Type, is_exp: bool) -> TokenStr
     };
     if is_float(ty) {
         quote::quote! {
-            .with_hint(gdnative::nativescript::init::property::FloatHint::#range_type(
-                gdnative::nativescript::property::RangeHint::new(#min.into(), #max.into())
+            .with_hint(gdnative::export::hint::FloatHint::#range_type(
+                gdnative::export::hint::RangeHint::new(#min.into(), #max.into())
                     #step
                     #or_lesser
                     #or_greater
@@ -86,8 +86,8 @@ fn export_range_hint_helper(range: &[&Lit], ty: &Type, is_exp: bool) -> TokenStr
         }
     } else {
         quote::quote! {
-            .with_hint(gdnative::nativescript::init::property::IntHint::#range_type(
-                gdnative::nativescript::property::RangeHint::new(#min, #max)
+            .with_hint(gdnative::export::hint::IntHint::#range_type(
+                gdnative::export::hint::RangeHint::new(#min, #max)
                     #step
                     #or_lesser
                     #or_greater
@@ -99,7 +99,7 @@ fn export_range_hint_helper(range: &[&Lit], ty: &Type, is_exp: bool) -> TokenStr
 fn export_enum_hint(export_enum: &ExportEnum, ty: &Type) -> TokenStream {
     let items = export_enum.values.iter();
     let hint = quote::quote! {
-        gdnative::nativescript::init::property::EnumHint::new(
+        gdnative::export::hint::EnumHint::new(
             vec![
                 #(#items.into(),)*
             ]
@@ -107,11 +107,11 @@ fn export_enum_hint(export_enum: &ExportEnum, ty: &Type) -> TokenStream {
     };
     if is_number(ty) {
         quote::quote! {
-            .with_hint(gdnative::nativescript::init::property::IntHint::Enum(#hint))
+            .with_hint(gdnative::export::hint::IntHint::Enum(#hint))
         }
     } else {
         quote::quote! {
-            .with_hint(gdnative::nativescript::init::property::StringHint::Enum(#hint))
+            .with_hint(gdnative::export::hint::StringHint::Enum(#hint))
         }
     }
 }
@@ -123,14 +123,14 @@ fn export_file_hint(export_file: &ExportFile) -> TokenStream {
         .map(|(_, lit)| quote::quote! { vec![#lit.into()]})
         .unwrap_or(quote::quote! {vec![]});
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::StringHint::File(
-            gdnative::nativescript::init::property::EnumHint::new(#filter)))
+        .with_hint(gdnative::export::hint::StringHint::File(
+            gdnative::export::hint::EnumHint::new(#filter)))
     }
 }
 
 fn export_dir_hint() -> TokenStream {
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::StringHint::Dir)
+        .with_hint(gdnative::export::hint::StringHint::Dir)
     }
 }
 
@@ -141,26 +141,26 @@ fn export_global_file_hint(export_global_file: &ExportGlobalFile) -> TokenStream
         .map(|(_, lit)| quote::quote! { vec![#lit.into()]})
         .unwrap_or(quote::quote! {vec![]});
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::StringHint::GlobalFile(
-            gdnative::nativescript::init::property::EnumHint::new(#filter)))
+        .with_hint(gdnative::export::hint::StringHint::GlobalFile(
+            gdnative::export::hint::EnumHint::new(#filter)))
     }
 }
 
 fn export_global_dir_hint() -> TokenStream {
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::StringHint::GlobalDir)
+        .with_hint(gdnative::export::hint::StringHint::GlobalDir)
     }
 }
 
 fn export_multiline_hint() -> TokenStream {
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::StringHint::Multiline)
+        .with_hint(gdnative::export::hint::StringHint::Multiline)
     }
 }
 
 fn export_color_no_alpha_hint() -> TokenStream {
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::ColorHint::NoAlpha)
+        .with_hint(gdnative::export::hint::ColorHint::NoAlpha)
     }
 }
 
@@ -172,31 +172,31 @@ fn export_node_path_hint(_node_path: &ExportNodePath) -> TokenStream {
 fn export_flags_hint(flags: &ExportFlags) -> TokenStream {
     let items = flags.values.iter();
     let hint = quote::quote! {
-        gdnative::nativescript::init::property::EnumHint::new(
+        gdnative::export::hint::EnumHint::new(
             vec![
                 #(#items.into(),)*
             ]
         )
     };
     quote::quote! {
-        .with_hint(gdnative::nativescript::init::property::IntHint::Flags(#hint))
+        .with_hint(gdnative::export::hint::IntHint::Flags(#hint))
     }
 }
 
 fn export_flags_2d_physics_hint() -> TokenStream {
-    quote::quote! { .with_hint(gdnative::nativescript::init::property::IntHint::Layers2DPhysics)}
+    quote::quote! { .with_hint(gdnative::export::hint::IntHint::Layers2DPhysics)}
 }
 
 fn export_flags_2d_render_hint() -> TokenStream {
-    quote::quote! { .with_hint(gdnative::nativescript::init::property::IntHint::Layers2DRender)}
+    quote::quote! { .with_hint(gdnative::export::hint::IntHint::Layers2DRender)}
 }
 
 fn export_flags_3d_physics_hint() -> TokenStream {
-    quote::quote! { .with_hint(gdnative::nativescript::init::property::IntHint::Layers3DPhysics)}
+    quote::quote! { .with_hint(gdnative::export::hint::IntHint::Layers3DPhysics)}
 }
 
 fn export_flags_3d_render_hint() -> TokenStream {
-    quote::quote! { .with_hint(gdnative::nativescript::init::property::IntHint::Layers3DRender)}
+    quote::quote! { .with_hint(gdnative::export::hint::IntHint::Layers3DRender)}
 }
 
 pub fn is_number(ty: &Type) -> bool {

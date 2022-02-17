@@ -1,6 +1,5 @@
 use crate::unsafe_functions::result_ext::ResultExt;
-use gdnative::prelude::{Node, PackedScene, SubClass};
-use gdnative::TRef;
+use gdnative::prelude::{Node, PackedScene, SubClass, TRef};
 
 pub trait PackedSceneExt<'a> {
     /// Tries to instance a scene (with `edit_state=0)` and cast it. Returns errors if it fails.

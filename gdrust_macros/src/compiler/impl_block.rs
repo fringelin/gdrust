@@ -78,7 +78,7 @@ fn builder_for_property(property: &Property) -> TokenStream {
     })};
     let default = get_default(default.as_ref());
     quote::quote! {
-        builder.add_property::<#ty>(#ident_str)
+        builder.property(#ident_str)
             #hint
             #getter
             #setter
@@ -91,12 +91,7 @@ fn builder_for_signal(signal: &SignalDecl) -> TokenStream {
     let name_str = signal.name.to_string();
     let args: Vec<TokenStream> = signal.args.iter().map(|x| create_signal_arg(x)).collect();
     quote::quote! {
-        builder.add_signal(gdnative::nativescript::Signal {
-            name: #name_str,
-            args: &[
-                #(#args,)*
-            ]
-        });
+        builder.signal(#name_str).done();
     }
 }
 

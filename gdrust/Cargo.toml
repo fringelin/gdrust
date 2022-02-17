@@ -18,5 +18,5 @@ categories = [
 ]
 
 [dependencies]
-gdnative = "0.9"
+gdnative = { git = "https://github.com/godot-rust/godot-rust.git" }
 gdrust_macros = { path = "../gdrust_macros", version = "=0.1.0" }

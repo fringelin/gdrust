@@ -1,6 +1,5 @@
 use crate::unsafe_functions::result_ext::ResultExt;
-use gdnative::prelude::{GodotString, PackedScene, ResourceLoader};
-use gdnative::Ref;
+use gdnative::prelude::{GodotString, PackedScene, Ref, ResourceLoader};
 
 pub trait ResourceLoaderExt {
     /// Tries to load a scene.
