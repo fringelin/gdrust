@@ -13,7 +13,7 @@ pub trait NodeExt {
     /// ```gdscript
     /// get_node(path)
     /// ```
-    fn expect_node<T: SubClass<Node>, P: Into<NodePath>>(&self, path: P) -> TRef<T>;
+    fn expect_node<'a, T: SubClass<Node>, P: Into<NodePath>>(&self, path: P) -> TRef<'a, T>;
 
     /// Gets the parent node with a type. This has an explicit `unsafe` block, and can panic. The
     /// unsafe code is calling `assume_safe` on the parent node.
@@ -25,7 +25,7 @@ pub trait NodeExt {
     /// ```gdscript
     /// get_parent()
     /// ```
-    fn expect_parent<T: SubClass<Node>>(&self) -> TRef<T>;
+    fn expect_parent<'a, T: SubClass<Node>>(&self) -> TRef<'a, T>;
 
     /// Gets the scene tree. This has an explicit `unsafe` block, and can panic. The unsafe code is
     /// calling `assume_safe` on the scene tree.
@@ -36,28 +36,27 @@ pub trait NodeExt {
     /// ```gdscript
     /// get_tree()
     /// ```
-    fn expect_tree(&self) -> TRef<SceneTree>;
+    fn expect_tree<'a>(&self) -> TRef<'a, SceneTree>;
 }
 
-impl<'a, T: SubClass<Node>> NodeExt for TRef<'a, T> {
-    fn expect_node<Child: SubClass<Node>, P: Into<NodePath>>(
+impl<T: SubClass<Node>> NodeExt for T {
+    fn expect_node<'a, Child: SubClass<Node>, P: Into<NodePath>>(
         &self,
         path: P,
-    ) -> TRef<'a, Child, Shared> {
+    ) -> TRef<'a, Child> {
         let path = path.into();
+        let path_name = path.to_string();
         unsafe {
             self.upcast()
-                .get_node(path.new_ref())
-                .godot_expect(
-                    format!("Could not find a node at {}", path.new_ref().to_string()).as_str(),
-                )
+                .get_node(path)
+                .godot_expect(format!("Could not find a node at {}", path_name).as_str())
                 .assume_safe()
                 .cast::<Child>()
                 .godot_expect("Could not cast")
         }
     }
 
-    fn expect_parent<Child: SubClass<Node>>(&self) -> TRef<'a, Child, Shared> {
+    fn expect_parent<'a, Child: SubClass<Node>>(&self) -> TRef<'a, Child> {
         unsafe {
             self.upcast()
                 .get_parent()
@@ -68,7 +67,7 @@ impl<'a, T: SubClass<Node>> NodeExt for TRef<'a, T> {
         }
     }
 
-    fn expect_tree(&self) -> TRef<'a, SceneTree, Shared> {
+    fn expect_tree<'a>(&self) -> TRef<'a, SceneTree, Shared> {
         unsafe {
             self.upcast()
                 .get_tree()
