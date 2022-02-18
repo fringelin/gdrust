@@ -7,9 +7,6 @@ use syn::{parse_quote, Lit, Type};
 
 pub(crate) fn property_hint(export: &ExportType, ty: &Type) -> TokenStream {
     match export {
-        ExportType::Extend => {
-            panic!("Should only call property_hint if there is an export. Found Extend")
-        }
         ExportType::NoHint | ExportType::Export => quote::quote! {},
         ExportType::NoExport => {
             panic!("Should only call property_hint if there is an export. Found NoExport")
