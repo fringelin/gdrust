@@ -8,16 +8,16 @@ pub fn create_signal_arg(arg: &SignalArgDecl) -> TokenStream {
     let default = if let Some((_, default)) = arg.default.as_ref() {
         quote::quote! { gdnative::core_types::ToVariant::to_variant(&#default)}
     } else {
-        quote::quote! { gdnative::core_types::Variant::new() }
+        quote::quote! { gdnative::core_types::Variant::default() }
     };
     let export_info = export_info(arg);
     quote::quote! {
-        gdnative::nativescript::SignalArgument {
-            name: #name_str,
+        .with_param_custom(gdnative::export::SignalParam {
+            name: #name_str.into(),
             default: #default,
             export_info: #export_info,
-            usage: gdnative::nativescript::PropertyUsage::DEFAULT,
-        }
+            usage: gdnative::export::PropertyUsage::DEFAULT,
+        })
     }
 }
 
@@ -52,11 +52,11 @@ fn export_info(arg: &SignalArgDecl) -> TokenStream {
         || ty == &parse_quote! { ColorArray }
     {
         quote::quote! {
-            gdnative::nativescript::ExportInfo::new(gdnative::core_types::VariantType::#ty)
+            gdnative::export::ExportInfo::new(gdnative::core_types::VariantType::#ty)
         }
     } else {
         quote::quote! {
-            gdnative::nativescript::ExportInfo::resource_type::<#ty>()
+            gdnative::export::ExportInfo::resource_type::<#ty>()
         }
     }
 }

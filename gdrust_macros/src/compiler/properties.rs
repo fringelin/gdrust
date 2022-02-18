@@ -29,6 +29,7 @@ mod kw {
 
 #[derive(Clone)]
 pub enum ExportType {
+    Extend,
     NoHint,
     NoExport,
     Export,
@@ -197,7 +198,7 @@ impl Property {
         Self {
             name,
             ty,
-            export_type: ExportType::NoHint,
+            export_type: ExportType::NoExport,
             default: None,
         }
     }
@@ -241,6 +242,9 @@ pub fn get_property(item: &mut Field) -> Property {
             let mut should_filter = false;
             let tokens = x.tokens.clone().into();
             match ident.as_str() {
+                "extend" => {
+                    property.export_type = ExportType::Extend;
+                }
                 "default" => {
                     let default = parse::<DefaultProperty>(tokens)
                         .expect("Invalid params for default")

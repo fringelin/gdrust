@@ -91,7 +91,7 @@ fn builder_for_signal(signal: &SignalDecl) -> TokenStream {
     let name_str = signal.name.to_string();
     let args: Vec<TokenStream> = signal.args.iter().map(|x| create_signal_arg(x)).collect();
     quote::quote! {
-        builder.signal(#name_str).done();
+        builder.signal(#name_str)#(#args)*.done();
     }
 }
 
