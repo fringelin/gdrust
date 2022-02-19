@@ -1,18 +1,26 @@
-//! A collection of unsafe functions to use. It is highly recommended you understand
-//! `gdnative-rust`'s memory model and read the documentation on these methods. These methods are
-//! only really unsafe if you don't understand what they are doing.
+mod instance_ext;
+mod node_ext;
+mod object_ext;
+mod option_ext;
+mod packed_scene_ext;
+mod ref_ext;
+mod resource_loader_ext;
+mod result_ext;
+mod spatial_ext;
+mod vector2_ext;
+mod vector3_ext;
 
-pub mod instance_ext;
-pub mod node_ext;
-pub mod object_ext;
-pub mod option_ext;
-pub mod packed_scene_ext;
-pub mod ref_ext;
-pub mod resource_loader_ext;
-pub mod result_ext;
-pub mod spatial_ext;
-pub mod vector2_ext;
-pub mod vector3_ext;
+pub use crate::unsafe_functions::instance_ext::*;
+pub use crate::unsafe_functions::node_ext::*;
+pub use crate::unsafe_functions::object_ext::*;
+pub use crate::unsafe_functions::option_ext::*;
+pub use crate::unsafe_functions::packed_scene_ext::*;
+pub use crate::unsafe_functions::ref_ext::*;
+pub use crate::unsafe_functions::resource_loader_ext::*;
+pub use crate::unsafe_functions::result_ext::*;
+pub use crate::unsafe_functions::spatial_ext::*;
+pub use crate::unsafe_functions::vector2_ext::*;
+pub use crate::unsafe_functions::vector3_ext::*;
 
 /// Same functionality as `panic!()`, but also outputs to the godot output.
 #[macro_export]
