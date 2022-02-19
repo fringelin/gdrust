@@ -3,7 +3,7 @@ use gdnative::api::SceneTree;
 use gdnative::prelude::{NativeClass, Node, NodePath, Shared, SubClass, TInstance, TRef};
 
 pub trait NodeExt<P: Into<NodePath>> {
-    fn expect_instance<'a, T>(&self, path: P) -> Option<TInstance<'a, T>>
+    fn expect_instance<'a, T>(&self, path: P) -> TInstance<'a, T>
     where
         T: NativeClass,
         T::Base: SubClass<Node>;
@@ -45,7 +45,7 @@ pub trait NodeExt<P: Into<NodePath>> {
 }
 
 impl<T: SubClass<Node>, P: Into<NodePath>> NodeExt<P> for T {
-    fn expect_instance<'a, N>(&self, path: P) -> Option<TInstance<'a, N>>
+    fn expect_instance<'a, N>(&self, path: P) -> TInstance<'a, N>
     where
         N: NativeClass,
         N::Base: SubClass<Node>,
@@ -60,6 +60,7 @@ impl<T: SubClass<Node>, P: Into<NodePath>> NodeExt<P> for T {
                 .cast::<N::Base>()
                 .godot_expect("Could not cast")
                 .cast_instance()
+                .expect("Could not cast instance")
         }
     }
 
