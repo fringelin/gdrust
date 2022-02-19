@@ -2,6 +2,7 @@
 //! `gdnative-rust`'s memory model and read the documentation on these methods. These methods are
 //! only really unsafe if you don't understand what they are doing.
 
+pub mod instance_ext;
 pub mod node_ext;
 pub mod object_ext;
 pub mod option_ext;
