@@ -58,6 +58,12 @@ pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
+        impl std::ops::DerefMut for #struct_name {
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                &mut self.value
+            }
+        }
+
     };
     compiled.into()
 }
