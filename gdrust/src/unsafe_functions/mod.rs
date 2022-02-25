@@ -20,6 +20,7 @@ pub use crate::unsafe_functions::ref_ext::*;
 pub use crate::unsafe_functions::resource_loader_ext::*;
 pub use crate::unsafe_functions::result_ext::*;
 pub use crate::unsafe_functions::spatial_ext::*;
+pub use crate::unsafe_functions::tref_ext::*;
 pub use crate::unsafe_functions::vector2_ext::*;
 pub use crate::unsafe_functions::vector3_ext::*;
 
