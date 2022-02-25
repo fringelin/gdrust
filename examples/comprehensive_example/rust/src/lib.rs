@@ -1,6 +1,11 @@
 use gdnative::api::{Node, Texture};
 use gdnative::prelude::*;
-use gdrust::macros::gdrust;
+use gdrust::macros::*;
+
+#[single_value(extends = f32)]
+struct MyFloat {
+    value: f32,
+}
 
 #[gdrust(extends = Node)]
 #[signal(my_signal(arg1: F64, arg2: GodotString = "test".to_string()))]
