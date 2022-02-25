@@ -31,3 +31,32 @@ pub fn gdrust(attr: TokenStream, item: TokenStream) -> TokenStream {
     // println!("{}", compiled.to_string());
     compiled.into()
 }
+
+#[proc_macro_attribute]
+pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let item = syn::parse_macro_input!(item as ItemStruct);
+    let struct_name = &item.ident;
+    let extends = syn::parse_macro_input::parse::<Extends>(attr).unwrap_or(Extends {
+        ty: parse_quote! {},
+    });
+    let extends_type = &extends.ty;
+
+    let compiled = quote::quote! {
+        impl #struct_name {
+            pub fn new(value: #extends_type) -> Self {
+                Self { value }
+            }
+        }
+
+        use std::ops::Deref;
+        impl Deref for #struct_name {
+            type Target = #extends_type;
+
+            fn deref(&self) -> &Self::Target {
+                &self.value
+            }
+        }
+
+    };
+    compiled.into()
+}
