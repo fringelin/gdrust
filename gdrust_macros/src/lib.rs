@@ -42,7 +42,6 @@ pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
     let extends_type = &extends.ty;
 
     let compiled = quote::quote! {
-        use std::ops::Deref;
         #item
 
         impl #struct_name {
@@ -51,7 +50,7 @@ pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
-        impl Deref for #struct_name {
+        impl std::ops::Deref for #struct_name {
             type Target = #extends_type;
 
             fn deref(&self) -> &Self::Target {
