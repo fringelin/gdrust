@@ -7,6 +7,7 @@ mod ref_ext;
 mod resource_loader_ext;
 mod result_ext;
 mod spatial_ext;
+mod tref_ext;
 mod vector2_ext;
 mod vector3_ext;
 
