@@ -2,12 +2,12 @@
 name = "gdrust"
 version = "0.1.0"
 authors = ["gdrust developers"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 readme = "../README.md"
 description = "A simple tool to make interacting with gdnative-rust a little easier."
-homepage = "https://github.com/wyattjsmith1/gdrust"
-repository = "https://github.com/wyattjsmith1/gdrust"
+homepage = "https://github.com/fringelin/gdrust"
+repository = "https://github.com/fringelin/gdrust"
 keywords = [
     "godot",
     "gdnative",
@@ -19,4 +19,5 @@ categories = [
 
 [dependencies]
 gdnative = { git = "https://github.com/godot-rust/godot-rust.git" }
-gdrust_macros = { path = "../gdrust_macros", version = "=0.1.0" }
+gdrust_macros = { path = "../gdrust_macros", version = "0.1.0" }
+bevy = { version = "0.6", default-features = false }

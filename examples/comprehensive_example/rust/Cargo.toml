@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 gdrust = { path = "../../../gdrust" }
 gdnative = { git = "https://github.com/godot-rust/godot-rust.git" }
+bevy = { version = "0.6", default-features = false }
 
 [lib]
 crate-type = ["cdylib"]

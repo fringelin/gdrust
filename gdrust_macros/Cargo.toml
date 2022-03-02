@@ -2,12 +2,12 @@
 name = "gdrust_macros"
 version = "0.1.0"
 authors = ["gdrust developers"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 readme = "../README.md"
 description = "You are probably looking for `gdrust`. This is the macros it exports."
-homepage = "https://github.com/wyattjsmith1/gdrust"
-repository = "https://github.com/wyattjsmith1/gdrust"
+homepage = "https://github.com/fringelin/gdrust"
+repository = "https://github.com/fringelin/gdrust"
 keywords = [
     "godot",
     "gdnative",
