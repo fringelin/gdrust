@@ -1,11 +1,7 @@
-use bevy::{
-    app::App,
-    prelude::{CoreStage, ParallelSystemDescriptorCoercion, Plugin, SystemStage},
-};
+use bevy::prelude::{CoreStage, ParallelSystemDescriptorCoercion, Plugin, SystemStage};
 
 use self::{
     events::{DespawnPlayingGame, SpawnGame, SpawnNode, UserInput},
-    player::add_player_system,
     resources::{GameOver, IdleDelta, PhysicsDelta},
     stages::SyncStages,
     systems::{despawn_playing_game, end_game, spawn_game},

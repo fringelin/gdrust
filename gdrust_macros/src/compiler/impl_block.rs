@@ -2,6 +2,8 @@ use crate::compiler::hints::property_hint;
 use crate::compiler::properties::{ExportType, Property};
 use crate::compiler::signal_args::create_signal_arg;
 use crate::compiler::signals::SignalDecl;
+use crate::compiler::values::Value;
+use crate::kw::extends;
 use crate::Extends;
 use heck::ShoutySnakeCase;
 use proc_macro2::{Ident, Span, TokenStream};
@@ -119,4 +121,39 @@ fn get_default(default: Option<&Expr>) -> TokenStream {
             Default::default()
         }
     }
+}
+
+pub(crate) fn value_blocks(values: &[Value], extends: &Extends) -> Vec<TokenStream> {
+    let extends = &extends.ty;
+
+    values
+        .iter()
+        .map(|x| {
+            let name = x.name.clone();
+            let value = x.value.clone();
+            let ty = x.ty.clone();
+
+            if x.is_node {
+                quote::quote! {
+                    #name: node.cast::<#extends>().unwrap().claim(),
+                }
+            } else if let Some(component) = x.component.clone() {
+                quote::quote! {
+                    #name: #ty::new(node.expect_node::<gdnative::prelude::Node,&str>(#component).claim()),
+                }
+            } else if let Some(value) = value {
+                quote::quote! {
+                    #name: #value,
+                }
+            } else if let Some(script) = x.script.clone() {
+                quote::quote! {
+                    #name: node.get_script().unwrap().expect_safe().get(#script).try_to::<#ty>().unwrap(),
+                }
+            } else {
+                quote::quote! {
+                    #name: Default::default(),
+                }
+            }
+        })
+        .collect()
 }

@@ -33,37 +33,23 @@ pub fn gdrust(attr: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 #[proc_macro_attribute]
+pub fn gdcomponent(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let mut parsed = syn::parse_macro_input!(item as ItemStruct);
+    let extends = syn::parse_macro_input::parse::<Extends>(attr).unwrap_or(Extends {
+        ty: parse_quote! { gdnative::api::Object },
+    });
+    let compiled = compiler::compile_gd_component(&mut parsed, &extends);
+    // println!("{}", compiled.to_string());
+    compiled.into()
+}
+
+#[proc_macro_attribute]
 pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
-    let item = syn::parse_macro_input!(item as ItemStruct);
-    let struct_name = &item.ident;
+    let mut parsed = syn::parse_macro_input!(item as ItemStruct);
     let extends = syn::parse_macro_input::parse::<Extends>(attr).unwrap_or(Extends {
         ty: parse_quote! { f32 },
     });
-    let extends_type = &extends.ty;
 
-    let compiled = quote::quote! {
-        #item
-
-        impl #struct_name {
-            pub fn new(value: #extends_type) -> Self {
-                Self { value }
-            }
-        }
-
-        impl std::ops::Deref for #struct_name {
-            type Target = #extends_type;
-
-            fn deref(&self) -> &Self::Target {
-                &self.value
-            }
-        }
-
-        impl std::ops::DerefMut for #struct_name {
-            fn deref_mut(&mut self) -> &mut Self::Target {
-                &mut self.value
-            }
-        }
-
-    };
+    let compiled = compiler::compile_single_value(&mut parsed, &extends);
     compiled.into()
 }

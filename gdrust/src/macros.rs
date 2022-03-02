@@ -7,7 +7,6 @@ macro_rules! gd_ecs_controller {
         use bevy::log::LogPlugin;
         use bevy::prelude::{App, Schedule, Stage, World};
         use bevy::MinimalPlugins;
-        use gdnative::api::World;
         use gdnative::prelude::*;
 
         use gdrust::ecs::engine_sync::{

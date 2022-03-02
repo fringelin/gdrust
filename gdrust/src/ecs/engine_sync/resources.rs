@@ -1,4 +1,3 @@
-use gdrust::macros::single_value;
 use gdrust_macros::single_value;
 
 pub trait Delta {
