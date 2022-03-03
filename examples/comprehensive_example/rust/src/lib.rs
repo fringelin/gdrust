@@ -8,7 +8,7 @@ use gdrust::unsafe_functions::{NodeExt, RefExt};
 struct ComponentA {
     #[node]
     node: Ref<Node2D>,
-    #[script("x")]
+    #[property("x")]
     x: i32,
     y: f32,
     #[value(0.0)]
