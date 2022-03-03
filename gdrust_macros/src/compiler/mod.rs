@@ -34,7 +34,7 @@ pub(crate) fn compile(item: &mut ItemStruct, extends: &Extends) -> TokenStream {
 pub(crate) fn compile_gd_bundle(item: &mut ItemStruct) -> TokenStream {
     let components = extract_bundles(item);
     let struct_name = &item.ident;
-    item.attrs.push(parse_quote! { #[derive(Component)] });
+    item.attrs.push(parse_quote! { #[derive(Bundle)] });
     let component_blocks = impl_block::component_blocks(&components);
 
     quote::quote! {
