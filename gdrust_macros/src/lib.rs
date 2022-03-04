@@ -44,6 +44,14 @@ pub fn gdcomponent(attr: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 #[proc_macro_attribute]
+pub fn gdbundle(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let mut parsed = syn::parse_macro_input!(item as ItemStruct);
+    let compiled = compiler::compile_gd_bundle(&mut parsed);
+    // println!("{}", compiled.to_string());
+    compiled.into()
+}
+
+#[proc_macro_attribute]
 pub fn single_value(attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut parsed = syn::parse_macro_input!(item as ItemStruct);
     let extends = syn::parse_macro_input::parse::<Extends>(attr).unwrap_or(Extends {

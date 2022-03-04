@@ -1,3 +1,4 @@
+mod bundle;
 mod hints;
 mod impl_block;
 mod properties;
@@ -5,6 +6,7 @@ mod signal_args;
 mod signals;
 mod values;
 
+use crate::compiler::bundle::extract_bundles;
 use crate::compiler::properties::extract_properties;
 use crate::compiler::signals::extract_signals;
 use crate::compiler::values::extract_values;
@@ -26,6 +28,27 @@ pub(crate) fn compile(item: &mut ItemStruct, extends: &Extends) -> TokenStream {
         #item
 
         #impl_block
+    }
+}
+
+pub(crate) fn compile_gd_bundle(item: &mut ItemStruct) -> TokenStream {
+    let components = extract_bundles(item);
+    let struct_name = &item.ident;
+    item.attrs.push(parse_quote! { #[derive(Bundle)] });
+    let component_blocks = impl_block::component_blocks(&components);
+
+    quote::quote! {
+        #item
+
+        impl #struct_name {
+            pub fn new(node: Ref<gdnative::prelude::Node>) -> Self {
+                let node = node.expect_safe();
+
+                Self {
+                    #(#component_blocks)*
+                }
+            }
+        }
     }
 }
 

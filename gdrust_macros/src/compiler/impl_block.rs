@@ -1,3 +1,4 @@
+use crate::compiler::bundle::Bundle;
 use crate::compiler::hints::property_hint;
 use crate::compiler::properties::{ExportType, Property};
 use crate::compiler::signal_args::create_signal_arg;
@@ -145,11 +146,36 @@ pub(crate) fn value_blocks(values: &[Value], extends: &Extends) -> Vec<TokenStre
                 quote::quote! {
                     #name: #value,
                 }
-            } else if let Some(script) = x.script.clone() {
+            } else if let Some(property) = x.property.clone() {
                 quote::quote! {
-                    #name: node.get_script().unwrap().expect_safe().get(#script).try_to::<#ty>().unwrap(),
+                    #name: node.get(#property).try_to::<#ty>().unwrap(),
                 }
             } else {
+                quote::quote! {
+                    #name: Default::default(),
+                }
+            }
+        })
+        .collect()
+}
+
+pub(crate) fn component_blocks(values: &[Bundle]) -> Vec<TokenStream> {
+    values
+        .iter()
+        .map(|x| {
+            let name = x.name.clone();
+            let value = x.value.clone();
+            let ty = x.ty.clone();
+
+            if let Some(component) = x.component.clone() {
+                quote::quote! {
+                    #name: #ty::new(node.expect_node::<gdnative::prelude::Node,&str>(#component).claim()),
+                }
+            } else if let Some(value) = value {
+                quote::quote! {
+                    #name: #value,
+                }
+            }  else {
                 quote::quote! {
                     #name: Default::default(),
                 }
