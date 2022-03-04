@@ -18,9 +18,8 @@ pub struct SpawnNode {
 
 pub struct DespawnPlayingGame;
 
-#[single_value(extends = Ref <InputEvent >)]
 pub struct UserInput {
-    value: Ref<InputEvent>,
+    pub input: Ref<InputEvent>,
 }
 
 pub fn update_delta_resource<T: Resource + Delta>(world: &mut World, delta: f32) {
@@ -34,7 +33,9 @@ pub fn user_input(world: &mut World, event: TRef<InputEvent>) {
     world
         .get_resource_mut::<bevy::app::Events<UserInput>>()
         .expect("should be a user input event")
-        .send(UserInput::new(event.claim()));
+        .send(UserInput {
+            input: event.claim(),
+        });
 }
 
 pub fn spawn_game(world: &mut World, node: Ref<Node>) {
