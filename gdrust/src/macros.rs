@@ -10,7 +10,7 @@ macro_rules! gd_ecs_controller {
         use gdnative::prelude::*;
 
         use gdrust::ecs::engine_sync::{
-            events::{spawn_game, spawn_node, update_delta_resource, user_input},
+            events::{spawn_game, spawn_node, spawn_signal, update_delta_resource, user_input},
             resources::{IdleDelta, PhysicsDelta},
             EngineSyncPlugin,
         };
@@ -80,6 +80,11 @@ macro_rules! gd_ecs_controller {
             #[export]
             fn add_game_to_ecs(&mut self, _owner: &Node, other: Ref<Node>) {
                 spawn_game(&mut self.world, other);
+            }
+
+            #[export]
+            fn add_signal_to_ecs(&mut self, _owner: &Node, name: String, vars: VariantArray) {
+                spawn_signal(&mut self.world, name, vars);
             }
 
             #[export]

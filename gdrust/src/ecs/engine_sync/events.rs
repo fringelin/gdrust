@@ -1,9 +1,9 @@
 use bevy::{ecs::system::Resource, prelude::World};
+use gdnative::prelude::VariantArray;
 use gdnative::{
     api::{InputEvent, Node},
     prelude::{Ref, TRef},
 };
-use gdrust_macros::single_value;
 
 use super::resources::Delta;
 
@@ -20,6 +20,11 @@ pub struct DespawnPlayingGame;
 
 pub struct UserInput {
     pub input: Ref<InputEvent>,
+}
+
+pub struct SpawnSignal {
+    pub name: String,
+    pub vars: VariantArray,
 }
 
 pub fn update_delta_resource<T: Resource + Delta>(world: &mut World, delta: f32) {
@@ -50,4 +55,11 @@ pub fn spawn_node(world: &mut World, node: Ref<Node>, name: String) {
         .get_resource_mut::<bevy::app::Events<SpawnNode>>()
         .expect("No world spawn node event, did you forget to add Spawn node into your events?")
         .send(SpawnNode { node, name });
+}
+
+pub fn spawn_signal(world: &mut World, name: String, vars: VariantArray) {
+    world
+        .get_resource_mut::<bevy::app::Events<SpawnSignal>>()
+        .expect("No world spawn signal event, did you forget to add Spawn signal into your events?")
+        .send(SpawnSignal { name, vars });
 }
