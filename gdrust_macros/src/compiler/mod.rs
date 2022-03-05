@@ -53,10 +53,16 @@ pub(crate) fn compile_gd_bundle(item: &mut ItemStruct) -> TokenStream {
 }
 
 pub(crate) fn compile_gd_component(item: &mut ItemStruct, extends: &Extends) -> TokenStream {
-    let values = extract_values(item);
+    let (values, node) = extract_values(item);
+    let node = node.unwrap();
+
     let struct_name = &item.ident;
     item.attrs.push(parse_quote! { #[derive(Component)] });
     let value_blocks = impl_block::value_blocks(&values, extends);
+    let script_variables = impl_block::script_variables(&values, &node);
+
+    let node_name = node.name;
+    let extends = &extends.ty;
 
     quote::quote! {
         #item
@@ -69,6 +75,8 @@ pub(crate) fn compile_gd_component(item: &mut ItemStruct, extends: &Extends) -> 
                     #(#value_blocks)*
                 }
             }
+
+            #(#script_variables)*
         }
     }
 }

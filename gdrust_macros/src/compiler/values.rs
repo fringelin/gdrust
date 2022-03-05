@@ -7,15 +7,22 @@ mod kw {
     syn::custom_keyword!(value);
     syn::custom_keyword!(node);
     syn::custom_keyword!(component);
+    syn::custom_keyword!(property);
 }
 
+pub struct Component {
+    pub node: Value,
+    pub values: Vec<Value>,
+}
+
+#[derive(Clone)]
 pub struct Value {
     pub name: Ident,
     pub ty: Type,
     pub value: Option<Expr>,
-    pub is_node: bool,
     pub component: Option<Expr>,
     pub property: Option<Expr>,
+    pub(crate) is_node: bool,
 }
 
 impl Value {
@@ -24,9 +31,9 @@ impl Value {
             name,
             ty,
             value: None,
-            is_node: false,
             component: None,
             property: None,
+            is_node: false,
         }
     }
 }
@@ -45,8 +52,21 @@ impl Parse for ValueProperty {
 }
 
 #[allow(clippy::module_name_repetitions)]
-pub fn extract_values(item: &mut ItemStruct) -> Vec<Value> {
-    item.fields.iter_mut().map(|x| get_value(x)).collect()
+pub fn extract_values(item: &mut ItemStruct) -> (Vec<Value>, Option<Value>) {
+    let mut node = None;
+    (
+        item.fields
+            .iter_mut()
+            .map(|x| {
+                let value = get_value(x);
+                if value.is_node {
+                    node = Some(value.clone());
+                }
+                value
+            })
+            .collect(),
+        node,
+    )
 }
 
 pub fn get_value(item: &mut Field) -> Value {

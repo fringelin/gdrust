@@ -183,3 +183,27 @@ pub(crate) fn component_blocks(values: &[Bundle]) -> Vec<TokenStream> {
         })
         .collect()
 }
+
+pub(crate) fn script_variables(values: &[Value], node: &Value) -> Vec<TokenStream> {
+    let node_name = &node.name;
+
+    values
+        .iter()
+        .map(|x| {
+            let name = x.name.clone();
+            let value = x.value.clone();
+            let ty = x.ty.clone();
+
+            if let Some(property) = x.property.clone() {
+                quote::quote! {
+                    pub fn #name(&mut self, val: #ty) {
+                        self.#name = val;
+                        self.#node_name.expect_safe().set(#property, val);
+                    }
+                }
+            } else {
+                quote::quote! {}
+            }
+        })
+        .collect()
+}
