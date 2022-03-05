@@ -1,3 +1,4 @@
+use crate::ecs::engine_sync::events::SpawnSignal;
 use bevy::prelude::{CoreStage, ParallelSystemDescriptorCoercion, Plugin, SystemStage};
 
 use self::{
@@ -21,6 +22,7 @@ impl Plugin for EngineSyncPlugin {
             .add_event::<SpawnGame>()
             .add_event::<SpawnNode>()
             .add_event::<DespawnPlayingGame>()
+            .add_event::<SpawnSignal>()
             .add_system_to_stage(CoreStage::Last, spawn_game)
             .add_stage_after(
                 CoreStage::Last,
