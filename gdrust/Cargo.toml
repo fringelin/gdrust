@@ -20,4 +20,4 @@ categories = [
 [dependencies]
 gdnative = { git = "https://github.com/godot-rust/godot-rust.git" }
 gdrust_macros = { path = "../gdrust_macros", version = "0.1.0" }
-bevy = { version = "0.6" }
+bevy = { version = "0.6", default-features = false }
