@@ -1,6 +1,9 @@
 use crate::unsafe_functions::RefExt;
-use bevy::prelude::*;
-use gdnative::api::*;
+use bevy::prelude::{
+    BuildChildren, Commands, DespawnRecursiveExt, Entity, EventReader, EventWriter, Query, Res,
+    With,
+};
+use gdnative::prelude::Node;
 
 use super::{
     components::{GameNode, GodotObjRef, PlayingGame},
