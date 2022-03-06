@@ -388,7 +388,6 @@
 //! - [Contributing](./CONTRIBUTING.md)
 //! - [Reasoning for this project](./docs/why_gdrust.md)
 //! - [FAQs](./docs/faq.md)
-pub use gdrust_macros;
+pub use gdrust_macros as macros;
 pub mod ecs;
-pub mod macros;
 pub mod unsafe_functions;
