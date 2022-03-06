@@ -1,5 +1,16 @@
 use bevy::app::PluginGroupBuilder;
-use bevy::prelude::{Component, Plugin, PluginGroup};
+use bevy::diagnostic::DiagnosticsPlugin;
+use bevy::log::LogPlugin;
+use bevy::prelude::{App, Component, Plugin, PluginGroup, Schedule, Stage, World};
+use bevy::MinimalPlugins;
+use gdnative::prelude::*;
+use gdrust::ecs::engine_sync::events::SpawnNode;
+use gdrust::ecs::engine_sync::{
+    events::{spawn_game, spawn_node, update_delta_resource, user_input},
+    resources::{IdleDelta, PhysicsDelta},
+    EngineSyncPlugin,
+};
+use gdrust::macros::gdcomponent;
 use gdrust::unsafe_functions::{NodeExt, RefExt};
 
 #[gdcomponent(extends = Node2D)]
@@ -34,20 +45,6 @@ impl PluginGroup for GamePlugin {
         group.add(DefaultPlugin);
     }
 }
-
-// gd_ecs_controller!(GamePlugin);
-
-use bevy::diagnostic::DiagnosticsPlugin;
-use bevy::log::LogPlugin;
-use bevy::prelude::{App, Schedule, Stage, World};
-use bevy::MinimalPlugins;
-use gdnative::prelude::*;
-use gdrust::ecs::engine_sync::{
-    events::{spawn_game, spawn_node, spawn_signal, update_delta_resource, user_input},
-    resources::{IdleDelta, PhysicsDelta},
-    EngineSyncPlugin,
-};
-use gdrust::macros::gdcomponent;
 
 fn get_ecs() -> App {
     let mut ecs = App::new();
@@ -106,17 +103,12 @@ impl ECSController {
 
     #[export]
     fn add_node_to_ecs(&mut self, _owner: &Node, other: Ref<Node>, name: String) {
-        spawn_node(&mut self.world, other, name);
+        spawn_node(&mut self.world, SpawnNode { node: other, name });
     }
 
     #[export]
     fn add_game_to_ecs(&mut self, _owner: &Node, other: Ref<Node>) {
         spawn_game(&mut self.world, other);
-    }
-
-    #[export]
-    fn add_signal_to_ecs(&mut self, _owner: &Node, name: String, vars: VariantArray) {
-        spawn_signal(&mut self.world, name, vars);
     }
 
     #[export]

@@ -50,16 +50,9 @@ pub fn spawn_game(world: &mut World, node: Ref<Node>) {
         .send(SpawnGame { node });
 }
 
-pub fn spawn_node(world: &mut World, node: Ref<Node>, name: String) {
+pub fn spawn_node<T: Resource>(world: &mut World, spawn: T) {
     world
-        .get_resource_mut::<bevy::app::Events<SpawnNode>>()
+        .get_resource_mut::<bevy::app::Events<T>>()
         .expect("No world spawn node event, did you forget to add Spawn node into your events?")
-        .send(SpawnNode { node, name });
-}
-
-pub fn spawn_signal(world: &mut World, name: String, vars: VariantArray) {
-    world
-        .get_resource_mut::<bevy::app::Events<SpawnSignal>>()
-        .expect("No world spawn signal event, did you forget to add Spawn signal into your events?")
-        .send(SpawnSignal { name, vars });
+        .send(spawn);
 }
