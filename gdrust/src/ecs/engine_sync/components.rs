@@ -29,7 +29,7 @@ impl<T: GodotObject> DerefMut for GodotObjRef<T> {
 }
 
 #[derive(Component)]
-struct GodotObjInstance<T: NativeClass> {
+pub struct GodotObjInstance<T: NativeClass> {
     pub instance: Instance<T>,
 }
 
