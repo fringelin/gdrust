@@ -140,7 +140,7 @@ pub(crate) fn value_blocks(values: &[Value], extends: &Extends) -> Vec<TokenStre
                 }
             } else if let Some(component) = x.component.clone() {
                 quote::quote! {
-                    #name: #ty::new(node.expect_node::<gdnative::prelude::Node,&str>(#component).claim()),
+                    #name: #ty::new(node.expect_node::<gdnative::prelude::Node>(#component).claim()),
                 }
             } else if let Some(value) = value {
                 quote::quote! {
@@ -191,7 +191,6 @@ pub(crate) fn script_variables(values: &[Value], node: &Value) -> Vec<TokenStrea
         .iter()
         .map(|x| {
             let name = x.name.clone();
-            let value = x.value.clone();
             let ty = x.ty.clone();
 
             if let Some(property) = x.property.clone() {

@@ -2,8 +2,8 @@ use crate::unsafe_functions::option_ext::OptionExt;
 use gdnative::api::SceneTree;
 use gdnative::prelude::{NativeClass, Node, NodePath, Shared, SubClass, TInstance, TRef};
 
-pub trait NodeExt {
-    fn expect_instance<'a, T, P: Into<NodePath>>(&self, path: P) -> TInstance<'a, T>
+pub trait NodeExt<P: Into<NodePath>> {
+    fn expect_instance<'a, T>(&self, path: P) -> TInstance<'a, T>
     where
         T: NativeClass,
         T::Base: SubClass<Node>;
@@ -18,8 +18,10 @@ pub trait NodeExt {
     /// ```gdscript
     /// get_node(path)
     /// ```
-    fn expect_node<'a, T: SubClass<Node>, P: Into<NodePath>>(&self, path: P) -> TRef<'a, T>;
+    fn expect_node<'a, T: SubClass<Node>>(&self, path: P) -> TRef<'a, T>;
+}
 
+pub trait NodeTreeExt {
     /// Gets the parent node with a type. This has an explicit `unsafe` block, and can panic. The
     /// unsafe code is calling `assume_safe` on the parent node.
     /// # Panics
@@ -44,8 +46,8 @@ pub trait NodeExt {
     fn expect_tree<'a>(&self) -> TRef<'a, SceneTree>;
 }
 
-impl<T: SubClass<Node>> NodeExt for T {
-    fn expect_instance<'a, N, P: Into<NodePath>>(&self, path: P) -> TInstance<'a, N>
+impl<T: SubClass<Node>, P: Into<NodePath>> NodeExt<P> for T {
+    fn expect_instance<'a, N>(&self, path: P) -> TInstance<'a, N>
     where
         N: NativeClass,
         N::Base: SubClass<Node>,
@@ -64,7 +66,7 @@ impl<T: SubClass<Node>> NodeExt for T {
         }
     }
 
-    fn expect_node<'a, Child, P: Into<NodePath>>(&self, path: P) -> TRef<'a, Child>
+    fn expect_node<'a, Child>(&self, path: P) -> TRef<'a, Child>
     where
         Child: SubClass<Node>,
     {
@@ -79,7 +81,9 @@ impl<T: SubClass<Node>> NodeExt for T {
                 .godot_expect("Could not cast")
         }
     }
+}
 
+impl<T: SubClass<Node>> NodeTreeExt for T {
     fn expect_parent<'a, Child: SubClass<Node>>(&self) -> TRef<'a, Child> {
         unsafe {
             self.upcast()

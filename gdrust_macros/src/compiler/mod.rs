@@ -61,9 +61,6 @@ pub(crate) fn compile_gd_component(item: &mut ItemStruct, extends: &Extends) -> 
     let value_blocks = impl_block::value_blocks(&values, extends);
     let script_variables = impl_block::script_variables(&values, &node);
 
-    let node_name = node.name;
-    let extends = &extends.ty;
-
     quote::quote! {
         #item
 
