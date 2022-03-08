@@ -29,6 +29,32 @@ impl<T: GodotObject> DerefMut for GodotObjRef<T> {
 }
 
 #[derive(Component)]
+struct GodotObjInstance<T: NativeClass> {
+    pub instance: Instance<T>,
+}
+
+impl<T: NativeClass> GodotObjInstance<T> {
+    #[warn(dead_code)]
+    pub fn new(instance: Instance<T>) -> Self {
+        Self { instance }
+    }
+}
+
+impl<T: NativeClass> Deref for GodotObjInstance<T> {
+    type Target = Instance<T>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.instance
+    }
+}
+
+impl<T: NativeClass> DerefMut for GodotObjInstance<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.instance
+    }
+}
+
+#[derive(Component)]
 pub struct GameNode;
 
 #[derive(Component)]
