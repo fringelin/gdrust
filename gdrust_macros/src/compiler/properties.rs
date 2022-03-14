@@ -204,16 +204,15 @@ impl Property {
 }
 
 struct DefaultProperty {
-    pub paren_token: token::Paren,
     pub expr: Expr,
 }
 
 impl Parse for DefaultProperty {
     fn parse(input: ParseStream) -> Result<Self> {
         let content;
-        let paren_token = parenthesized!(content in input);
+        let _paren_token = parenthesized!(content in input);
         let expr = content.parse()?;
-        Ok(Self { paren_token, expr })
+        Ok(Self { expr })
     }
 }
 

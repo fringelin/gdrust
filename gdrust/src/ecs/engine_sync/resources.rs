@@ -1,10 +1,7 @@
-use gdrust_macros::single_value;
-
 pub trait Delta {
     fn set_delta(&mut self, delta: f32);
 }
 
-#[single_value(extends = f32)]
 #[derive(Default)]
 pub struct IdleDelta {
     pub value: f32,
@@ -22,7 +19,6 @@ pub enum GameOver {
     Lose,
 }
 
-#[single_value(extends = f32)]
 #[derive(Default)]
 pub struct PhysicsDelta {
     pub value: f32,

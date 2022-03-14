@@ -1,5 +1,5 @@
 use gdnative::object::bounds::{AssumeSafeLifetime, LifetimeConstraint};
-use gdnative::prelude::{GodotObject, Instance, NativeClass, Ref, Shared, TInstance, TRef, Unique};
+use gdnative::prelude::{GodotObject, Instance, NativeClass, Shared, TInstance, Unique};
 
 pub trait InstanceExt<T: NativeClass> {
     fn expect_safe<'a, 'r>(&'r self) -> TInstance<'a, T, Shared>
