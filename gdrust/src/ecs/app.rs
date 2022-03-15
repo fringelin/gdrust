@@ -6,8 +6,8 @@ use bevy::MinimalPlugins;
 use std::sync::Mutex;
 
 lazy_static::lazy_static! {
-    static ref WORLD: Mutex<World> = Mutex::new(World::default());
-    static ref SCHEDULE: Mutex<Schedule> = Mutex::new(Schedule::default());
+    pub static ref WORLD: Mutex<World> = Mutex::new(World::default());
+    pub static ref SCHEDULE: Mutex<Schedule> = Mutex::new(Schedule::default());
 }
 
 pub fn with_world<F>(mut f: F)
