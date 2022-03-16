@@ -16,14 +16,9 @@ pub fn spawn_game(
     mut on_spawn_game: EventReader<SpawnGame>,
     children: Query<Entity, With<PlayingGame>>,
 ) {
-    for SpawnGame { node } in on_spawn_game.iter() {
-        let mut parent = commands.spawn();
-        parent
-            .insert(GodotObjRef::new(node.clone()))
-            .insert(GameNode)
-            .insert(PlayingGame);
+    for SpawnGame { entity } in on_spawn_game.iter() {
         for child in children.iter() {
-            parent.add_child(child);
+            commands.entity(*entity).add_child(child);
         }
     }
 }

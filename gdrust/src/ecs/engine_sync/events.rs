@@ -1,3 +1,4 @@
+use bevy::prelude::Entity;
 use bevy::{ecs::system::Resource, prelude::World};
 use gdnative::prelude::VariantArray;
 use gdnative::{
@@ -8,7 +9,7 @@ use gdnative::{
 use super::resources::Delta;
 
 pub struct SpawnGame {
-    pub node: Ref<Node>,
+    pub entity: Entity,
 }
 
 pub struct SpawnNode {
@@ -43,11 +44,11 @@ pub fn user_input(world: &mut World, event: TRef<InputEvent>) {
         });
 }
 
-pub fn spawn_game(world: &mut World, node: Ref<Node>) {
+pub fn spawn_game(world: &mut World, entity: Entity) {
     world
         .get_resource_mut::<bevy::app::Events<SpawnGame>>()
         .expect("No world spawn game event, did you forget to add Spawn Game into your events?")
-        .send(SpawnGame { node });
+        .send(SpawnGame { entity });
 }
 
 pub fn spawn_node<T: Resource>(world: &mut World, spawn: T) {

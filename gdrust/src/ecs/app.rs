@@ -3,11 +3,11 @@ use bevy::diagnostic::DiagnosticsPlugin;
 use bevy::log::LogPlugin;
 use bevy::prelude::{App, Plugin, Schedule, World};
 use bevy::MinimalPlugins;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 
 lazy_static::lazy_static! {
-    pub static ref WORLD: Mutex<World> = Mutex::new(World::default());
-    pub static ref SCHEDULE: Mutex<Schedule> = Mutex::new(Schedule::default());
+    pub static ref WORLD: Arc<Mutex<World>> = Arc::new(Mutex::new(World::default()));
+    pub static ref SCHEDULE: Arc<Mutex<Schedule>> = Arc::new(Mutex::new(Schedule::default()));
 }
 
 pub fn with_world<F>(mut f: F)
